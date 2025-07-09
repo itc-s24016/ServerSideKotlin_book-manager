@@ -15,7 +15,7 @@
             userId="${username}"
             password="${password}" />
         <javaTypeResolver>
-                <property name="userJSR310Types" value="true"/>
+                <property name="useJSR310Types" value="true"/>
         </javaTypeResolver>
         <javaModelGenerator
                 targetPackage="jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.record"

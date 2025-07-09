@@ -4,7 +4,7 @@
 package jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper
 
 import java.sql.JDBCType
-import java.util.Date
+import java.time.LocalDate
 import org.mybatis.dynamic.sql.AliasableSqlTable
 import org.mybatis.dynamic.sql.util.kotlin.elements.column
 
@@ -26,6 +26,6 @@ object BookDynamicSqlSupport {
 
         val author = column<String>(name = "author", jdbcType = JDBCType.VARCHAR)
 
-        val releaseDate = column<Date>(name = "release_date", jdbcType = JDBCType.DATE)
+        val releaseDate = column<LocalDate>(name = "release_date", jdbcType = JDBCType.DATE)
     }
 }

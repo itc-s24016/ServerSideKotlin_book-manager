@@ -22,6 +22,7 @@ CREATE TABLE rental(
     book_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     rental_datetime DATETIME NOT NULL,
+    return_deadline DATETIME NOT NULL,
     FOREIGN KEY (book_id) REFERENCES book (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
 );

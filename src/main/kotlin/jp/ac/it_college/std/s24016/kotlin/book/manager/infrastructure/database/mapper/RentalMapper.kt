@@ -6,6 +6,7 @@ package jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.bookId
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.rental
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.rentalDatetime
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.returnDeadline
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.userId
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.record.Rental
 import org.apache.ibatis.annotations.Mapper
@@ -40,7 +41,8 @@ interface RentalMapper : CommonCountMapper, CommonDeleteMapper, CommonInsertMapp
     @Results(id="RentalResult", value = [
         Result(column="book_id", property="bookId", jdbcType=JdbcType.BIGINT),
         Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT),
-        Result(column="rental_datetime", property="rentalDatetime", jdbcType=JdbcType.TIMESTAMP)
+        Result(column="rental_datetime", property="rentalDatetime", jdbcType=JdbcType.TIMESTAMP),
+        Result(column="return_deadline", property="returnDeadline", jdbcType=JdbcType.TIMESTAMP)
     ])
     fun selectMany(selectStatement: SelectStatementProvider): List<Rental>
 
@@ -60,6 +62,7 @@ fun RentalMapper.insert(row: Rental) =
         map(bookId) toProperty "bookId"
         map(userId) toProperty "userId"
         map(rentalDatetime) toProperty "rentalDatetime"
+        map(returnDeadline) toProperty "returnDeadline"
     }
 
 fun RentalMapper.insertMultiple(records: Collection<Rental>) =
@@ -67,6 +70,7 @@ fun RentalMapper.insertMultiple(records: Collection<Rental>) =
         map(bookId) toProperty "bookId"
         map(userId) toProperty "userId"
         map(rentalDatetime) toProperty "rentalDatetime"
+        map(returnDeadline) toProperty "returnDeadline"
     }
 
 fun RentalMapper.insertMultiple(vararg records: Rental) =
@@ -77,9 +81,10 @@ fun RentalMapper.insertSelective(row: Rental) =
         map(bookId).toPropertyWhenPresent("bookId", row::bookId)
         map(userId).toPropertyWhenPresent("userId", row::userId)
         map(rentalDatetime).toPropertyWhenPresent("rentalDatetime", row::rentalDatetime)
+        map(returnDeadline).toPropertyWhenPresent("returnDeadline", row::returnDeadline)
     }
 
-private val columnList = listOf(bookId, userId, rentalDatetime)
+private val columnList = listOf(bookId, userId, rentalDatetime, returnDeadline)
 
 fun RentalMapper.selectOne(completer: SelectCompleter) =
     selectOne(this::selectOne, columnList, rental, completer)
@@ -98,6 +103,7 @@ fun KotlinUpdateBuilder.updateAllColumns(row: Rental) =
         set(bookId) equalToOrNull row::bookId
         set(userId) equalToOrNull row::userId
         set(rentalDatetime) equalToOrNull row::rentalDatetime
+        set(returnDeadline) equalToOrNull row::returnDeadline
     }
 
 fun KotlinUpdateBuilder.updateSelectiveColumns(row: Rental) =
@@ -105,4 +111,5 @@ fun KotlinUpdateBuilder.updateSelectiveColumns(row: Rental) =
         set(bookId) equalToWhenPresent row::bookId
         set(userId) equalToWhenPresent row::userId
         set(rentalDatetime) equalToWhenPresent row::rentalDatetime
+        set(returnDeadline) equalToWhenPresent row::returnDeadline
     }

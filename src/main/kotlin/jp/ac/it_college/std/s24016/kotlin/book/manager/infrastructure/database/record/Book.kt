@@ -3,11 +3,11 @@
  */
 package jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.record
 
-import java.util.Date
+import java.time.LocalDate
 
 data class Book(
     var id: Long? = null,
     var title: String? = null,
     var author: String? = null,
-    var releaseDate: Date? = null
+    var releaseDate: LocalDate? = null
 )
