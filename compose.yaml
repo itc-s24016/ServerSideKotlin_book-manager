@@ -1,0 +1,17 @@
+#データベースの初期設定を自動化するファイル
+services:
+  #MariaDBイメージのコンテナの定義を記述
+  db:
+    image: mariadb:lts               #mariadbの長期サポートバージョンを指定
+    ports:
+      - "3306:3306"                  #ポート番号指定
+    container_name: mariadb_host     #コンテナの名前は任意
+    environment:
+      MARIADB_ROOT_PASSWORD: mariadb #パスワードの文字列は任意
+    volumes:
+      - type: bind                   #host と container のディレクトリを紐付けする
+        source: ./db/data            #host のディレクトリパス
+        target: /var/lib/mysql       #container のディレクトリパス
+      - type: bind                   #初期化時に読み込むディレクトリ
+        source: ./db/sql             #host のディレクトリパス
+        target: /docker-entrypoint-initdb.d #container のディレクトリパス
