@@ -57,4 +57,5 @@ fun BookWithRentalMapper.select(completer: SelectCompleter) =
         run(completer)
     }
 
+//select * from book; の条件　
 fun BookWithRentalMapper.select() = select {}
