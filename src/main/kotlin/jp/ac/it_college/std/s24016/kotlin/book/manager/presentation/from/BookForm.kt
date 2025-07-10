@@ -1,11 +1,15 @@
 package jp.ac.it_college.std.s24016.kotlin.book.manager.presentation.from
 
 import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.BookWithRental
+import kotlinx.serialization.Serializable
+
 //書籍データのレスポンスモデルを定義する
+@Serializable
 data class GetBookListResponse(
     val bookList: List<BookInfo>
 )
 
+@Serializable
 data class BookInfo(
     val id: Long,
     val title: String,
