@@ -34,7 +34,7 @@ interface BookWithRentalMapper {
             Result(column = "user_id",         property = "userId",         jdbcType = JdbcType.BIGINT),
             Result(column = "rental_datetime", property = "rentalDatetime", jdbcType = JdbcType.TIMESTAMP),
             Result(column = "return_deadline", property = "returnDeadline", jdbcType = JdbcType.TIMESTAMP),
-        ] //ここで、KotlinのスネークケースをJavaで対応させるためにキャメルケースにしている
+        ] //KotlinのスネークケースをJavaで対応させるためにキャメルケースにしている
     )
     fun selectMany(selectStatementProvider: SelectStatementProvider): List<BookWithRental>
 }
