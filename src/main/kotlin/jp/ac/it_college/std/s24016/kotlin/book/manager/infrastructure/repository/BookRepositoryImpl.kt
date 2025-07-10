@@ -34,6 +34,7 @@ class BookRepositoryImpl (
                 releaseDate!!.toKotlinLocalDate()
             ),
             //レンタルモデルを渡す(レンタル中の書籍のみ)
+            //Java の LocalDateTime を Kotlin の LocalDateTime に変換
             userId?.let {
                 Rental(
                     id!!,
