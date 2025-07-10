@@ -49,6 +49,7 @@ private val columnList = listOf(
     returnDeadline
 )
 
+//後で検索条件を追加できるような select 関数
 fun BookWithRentalMapper.select(completer: SelectCompleter) =
     selectList(this::selectMany, columnList, book) {
         leftJoin(rental, "r"){
