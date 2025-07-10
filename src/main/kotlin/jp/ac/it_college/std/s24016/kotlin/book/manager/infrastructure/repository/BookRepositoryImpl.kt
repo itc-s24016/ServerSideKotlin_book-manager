@@ -1,4 +1,47 @@
 package jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.repository
 
-class BookRepositoryImpl {
+import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.Book
+import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.BookWithRental
+import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.Rental
+import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.repository.BookRepository
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookWithRentalMapper
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.select
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
+import org.springframework.stereotype.Repository
+//domain.repository.BookRepository と名前がかぶるので、as で別名を付ける
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.record.BookWithRental as BookWithRentalRecord
+
+//インターフェースを使用する目印
+@Repository
+class BookRepositoryImpl (
+    private val bookWithRentalMapper: BookWithRentalMapper
+): BookRepository {
+    override fun findAllWithRental(): List<BookWithRental> {
+        //データベースからデータを取り出し、toModelの書き方にしている
+        return bookWithRentalMapper.select().map(::toModel)
+    }
+
+    //レコードを受け取ってドメインに変換する
+    private fun toModel(record: BookWithRentalRecord) = record.run {
+        //run に書くことで this を活用、変数名の短縮が可能になっている
+        //強制的に非許容型にしている
+        BookWithRental(
+            Book(
+                id!!,
+                title!!,
+                author!!,
+                releaseDate!!.toKotlinLocalDate()
+            ),
+            //レンタルモデルを渡す(レンタル中の書籍のみ)
+            userId?.let {
+                Rental(
+                    id!!,
+                    userId!!,
+                    rentalDatetime!!.toKotlinLocalDateTime(),
+                    returnDeadline!!.toKotlinLocalDateTime()
+                )
+            }
+        )
+    }
 }
