@@ -5,6 +5,7 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.BookWithRent
 import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.Rental
 import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.repository.BookRepository
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookWithRentalMapper
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.findByPrimaryKey
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.select
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -20,6 +21,10 @@ class BookRepositoryImpl (
     override fun findAllWithRental(): List<BookWithRental> {
         //データベースからデータを取り出し、toModelの書き方にしている
         return bookWithRentalMapper.select().map(::toModel)
+    }
+
+    override fun findWithRental(bookId: Long): BookWithRental? {
+        return bookWithRentalMapper.findByPrimaryKey(bookId)?.let(::toModel)
     }
 
     //レコードを受け取ってドメインに変換する

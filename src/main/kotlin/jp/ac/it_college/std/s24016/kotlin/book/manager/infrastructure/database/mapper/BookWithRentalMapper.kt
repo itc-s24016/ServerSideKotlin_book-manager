@@ -6,6 +6,7 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.m
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookDynamicSqlSupport.id
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookDynamicSqlSupport.releaseDate
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookDynamicSqlSupport.title
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.bookId
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.rental
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.rentalDatetime
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport.returnDeadline
@@ -13,6 +14,7 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.m
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.record.BookWithRental
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Result
+import org.apache.ibatis.annotations.ResultMap
 import org.apache.ibatis.annotations.Results
 import org.apache.ibatis.annotations.SelectProvider
 import org.apache.ibatis.type.JdbcType
@@ -20,6 +22,7 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter
 import org.mybatis.dynamic.sql.util.kotlin.SelectCompleter
 import org.mybatis.dynamic.sql.util.kotlin.mybatis3.selectList
+import org.mybatis.dynamic.sql.util.kotlin.mybatis3.selectOne
 
 @Mapper
 interface BookWithRentalMapper {
@@ -37,6 +40,10 @@ interface BookWithRentalMapper {
         ] //KotlinのスネークケースをJavaで対応させるためにキャメルケースにしている
     )
     fun selectMany(selectStatementProvider: SelectStatementProvider): List<BookWithRental>
+
+    @SelectProvider(type = SqlProviderAdapter::class, method = "select")
+    @ResultMap("BookWithRentalResult")
+    fun selectOne(selectStatementProvider: SelectStatementProvider): BookWithRental?
 }
 
 private val columnList = listOf(
@@ -60,3 +67,18 @@ fun BookWithRentalMapper.select(completer: SelectCompleter) =
 
 //select * from book; の条件　
 fun BookWithRentalMapper.select() = select {}
+
+fun BookWithRentalMapper.selectOne(completer: SelectCompleter) =
+    selectOne(this::selectOne, columnList, book){
+    leftJoin(rental, "r"){
+        on(id) equalTo rental.bookId
+    }
+    run(completer)
+}
+
+fun BookWithRentalMapper.findByPrimaryKey(bookId: Long) =
+    selectOne {
+        where {
+            id isEqualTo bookId
+        }
+    }

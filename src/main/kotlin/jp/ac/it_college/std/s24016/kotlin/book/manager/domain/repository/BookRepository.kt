@@ -5,4 +5,6 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.BookWithRent
 //　関数を定義したインターフェース
 interface BookRepository {
     fun findAllWithRental(): List<BookWithRental>
+
+    fun findWithRental(bookId: Long): BookWithRental?
 }
