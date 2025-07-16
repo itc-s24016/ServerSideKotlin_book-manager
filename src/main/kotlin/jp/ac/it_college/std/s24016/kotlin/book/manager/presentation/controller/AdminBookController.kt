@@ -6,6 +6,8 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.presentation.from.Registe
 import jp.ac.it_college.std.s24016.kotlin.book.manager.presentation.from.RentalInfo
 import jp.ac.it_college.std.s24016.kotlin.book.manager.presentation.from.UpdateBookRequest
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,5 +36,10 @@ class AdminBookController (
                 id, title, author, releaseDate
             )
         }
+    }
+
+    @DeleteMapping("/delete/{bookId}")
+    fun delete(@PathVariable bookId: Long){
+        adminBookService.delete(bookId)
     }
 }

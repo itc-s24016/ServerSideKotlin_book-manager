@@ -6,6 +6,7 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.Rental
 import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.repository.BookRepository
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookMapper
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.BookWithRentalMapper
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.deleteByPrimaryKey
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.findByPrimaryKey
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.insert
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.select
@@ -47,6 +48,10 @@ class BookRepositoryImpl (
         bookMapper.updateByPrimaryKeySelective(
             BookRecord(id, title, author, releaseDate?.toJavaLocalDate())
         )
+    }
+
+    override fun delete(id: Long) {
+        bookMapper.deleteByPrimaryKey(id)
     }
 
 

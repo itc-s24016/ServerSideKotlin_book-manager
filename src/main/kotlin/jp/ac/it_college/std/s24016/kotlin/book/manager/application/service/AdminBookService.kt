@@ -36,4 +36,12 @@ class AdminBookService (
                 : IllegalStateException("存在しない書籍ID: ${bookId}") {}
         bookRepository.update(bookId, title, author, releaseDate)
     }
+
+    @Transactional
+    fun delete(bookId: Long) {
+        bookRepository.findWithRental(bookId)
+            ?: throw @ResponseStatus(HttpStatus.NOT_FOUND) object
+                : IllegalStateException("存在しない書籍ID: ${bookId}") {}
+        bookRepository.delete(bookId)
+    }
 }
