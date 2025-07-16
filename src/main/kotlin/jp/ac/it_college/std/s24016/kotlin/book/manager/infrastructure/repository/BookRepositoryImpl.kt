@@ -9,6 +9,8 @@ import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.m
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.findByPrimaryKey
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.insert
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.select
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.updateByPrimaryKeySelective
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -35,6 +37,18 @@ class BookRepositoryImpl (
     override fun register(book: Book) {
         bookMapper.insert(toRecord(book))
     }
+
+    override fun update(
+        id: Long,
+        title: String?,
+        author: String?,
+        releaseDate: LocalDate?
+    ) {
+        bookMapper.updateByPrimaryKeySelective(
+            BookRecord(id, title, author, releaseDate?.toJavaLocalDate())
+        )
+    }
+
 
     //レコードを受け取ってドメインに変換する(Java -> Kotlin)
     private fun toModel(record: BookWithRentalRecord) = record.run {
