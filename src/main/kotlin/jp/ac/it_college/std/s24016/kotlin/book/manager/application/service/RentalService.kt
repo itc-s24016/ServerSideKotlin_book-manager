@@ -24,7 +24,10 @@ class RentalService (
     private val userRepository: UserRepository,//ユーザが存在しているか
     private val bookRepository: BookRepository,//指定された書籍IDが存在するか
     private val rentalRepository: RentalRepository
+//    private val rentalRepository: RentalRepository
+
 ){
+
     @OptIn(ExperimentalTime::class)
     @Transactional
     fun startRental(bookId: Long, userId: Long){
@@ -49,5 +52,21 @@ class RentalService (
         rentalRepository.startRental(
             Rental(bookId, userId, rentalDatetime, returnDeadline)
         )
+    }
+    //貸出する処理
+    @Transactional
+    fun endRental(bookId: Long, userId: Long){
+        userRepository.find(userId)
+            ?: throw @ResponseStatus(HttpStatus.FORBIDDEN) object
+                : IllegalArgumentException("該当するユーザが存在しません ID: ${userId}") {}
+       val book = bookRepository.findWithRental(bookId)
+           ?: throw @ResponseStatus(HttpStatus.NOT_FOUND) object
+               : IllegalArgumentException("該当する書籍が存在しません ID: ${bookId}") {}
+        if (!book.isRental) throw @ResponseStatus(HttpStatus.BAD_REQUEST) object
+                : IllegalArgumentException("貸出中の書籍ではありません ID: ${bookId}") {}
+        if (book.rental?.userId != userId)
+            throw @ResponseStatus(HttpStatus.FORBIDDEN) object
+                : IllegalArgumentException("他のユーザへ貸出中の書籍です") {}
+        rentalRepository.endRental(bookId)
     }
 }

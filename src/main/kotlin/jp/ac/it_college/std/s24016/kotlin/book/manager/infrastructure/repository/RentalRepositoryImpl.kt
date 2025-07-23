@@ -1,8 +1,10 @@
-package jp.ac.it_college.std.s24000.kotlin.book.manager.infrastructure.repository
+package jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.repository
 
 import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.model.Rental
 import jp.ac.it_college.std.s24016.kotlin.book.manager.domain.repository.RentalRepository
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalDynamicSqlSupport
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.RentalMapper
+import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.delete
 import jp.ac.it_college.std.s24016.kotlin.book.manager.infrastructure.database.mapper.insert
 import kotlinx.datetime.toJavaLocalDateTime
 import org.springframework.stereotype.Repository
@@ -14,6 +16,14 @@ class RentalRepositoryImpl(
 ) : RentalRepository {
     override fun startRental(rental: Rental) {
         rentalMapper.insert(toRecord(rental))
+    }
+
+    override fun endRental(bookId: Long) {
+        rentalMapper.delete {
+            where {
+                RentalDynamicSqlSupport.bookId isEqualTo bookId
+            }
+        }
     }
 
     private fun toRecord(model: Rental): RentalRecord = model.run {

@@ -12,3 +12,6 @@ spring:
       host: localhost
       port: 6379
       password: null
+
+  session:
+    timeout: 3600 #最後にアクセスしてから１時間はセッションが保持される
